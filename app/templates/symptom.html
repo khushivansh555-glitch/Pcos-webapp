@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>PCOS Prediction</title>
+    <style>
+        body {
+            font-family: Arial;
+            background-color: #f4fff4;
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+            color: green;
+        }
+        form {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            max-width: 800px;
+            margin: auto;
+        }
+        input, select {
+            padding: 8px;
+            width: 100%;
+        }
+        button {
+            grid-column: span 2;
+            padding: 10px;
+            background-color: green;
+            color: white;
+            border: none;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+
+<h1>PCOS Prediction System</h1>
+
+<form action="/predict" method="POST">
+
+    <input type="number" step="any" name="Age" placeholder="Age (yrs)" required>
+    <input type="number" step="any" name="Weight" placeholder="Weight (Kg)" required>
+    <input type="number" step="any" name="Height" placeholder="Height (Cm)" required>
+    <input type="number" step="any" name="BMI" placeholder="BMI" required>
+
+    <select name="Blood_Group">
+        <option value="1">A+</option>
+        <option value="2">A-</option>
+        <option value="3">B+</option>
+        <option value="4">B-</option>
+        <option value="5">O+</option>
+        <option value="6">O-</option>
+        <option value="7">AB+</option>
+        <option value="8">AB-</option>
+    </select>
+
+    <input type="number" name="Pulse_rate" placeholder="Pulse rate (bpm)" required>
+    <input type="number" name="RR" placeholder="RR (breaths/min)" required>
+    <input type="number" step="any" name="Hb" placeholder="Hb(g/dl)" required>
+
+    <select name="Cycle">
+        <option value="1">Regular</option>
+        <option value="0">Irregular</option>
+    </select>
+
+    <input type="number" name="Cycle_length" placeholder="Cycle length (days)" required>
+    <input type="number" name="Marriage_Status" placeholder="Marriage Status (Years)" required>
+
+    <select name="Pregnant">
+        <option value="0">No</option>
+        <option value="1">Yes</option>
+    </select>
+
+    <input type="number" name="Abortions" placeholder="No. of abortions">
+
+    <input type="number" step="any" name="beta_HCG_1" placeholder="I beta-HCG">
+    <input type="number" step="any" name="beta_HCG_2" placeholder="II beta-HCG">
+
+    <input type="number" step="any" name="FSH" placeholder="FSH">
+    <input type="number" step="any" name="LH" placeholder="LH">
+    <input type="number" step="any" name="FSH_LH" placeholder="FSH/LH">
+
+    <input type="number" step="any" name="Hip" placeholder="Hip (inch)">
+    <input type="number" step="any" name="Waist" placeholder="Waist (inch)">
+    <input type="number" step="any" name="WHR" placeholder="Waist-Hip Ratio">
+
+    <input type="number" step="any" name="TSH" placeholder="TSH">
+    <input type="number" step="any" name="AMH" placeholder="AMH">
+    <input type="number" step="any" name="PRL" placeholder="PRL">
+    <input type="number" step="any" name="VitD3" placeholder="Vitamin D3">
+    <input type="number" step="any" name="PRG" placeholder="PRG">
+
+    <input type="number" name="RBS" placeholder="RBS">
+
+    <select name="Weight_gain">
+        <option value="0">No</option>
+        <option value="1">Yes</option>
+    </select>
+
+    <select name="Hair_growth" aria-placeholder="Hair_growth">
+        <option value="0">No</option>
+        <option value="1">Yes</option>
+    </select>
+
+    <select name="Skin_darkening" aria-placeholder="Skin_darkening">
+        <option value="0">No</option>
+        <option value="1">Yes</option>
+    </select>
+
+    <select name="Hair_loss" aria-placeholder="Hair_loss">
+        <option value="0">No</option>
+        <option value="1">Yes</option>
+    </select>
+
+    <select name="Pimples" aria-placeholder="Pimples">
+        <option value="0">No</option>
+        <option value="1">Yes</option>
+    </select>
+
+    <select name="Fast_food" aria-placeholder="Fast_food">
+        <option value="0">No</option>
+        <option value="1">Yes</option>
+    </select>
+
+    <select name="Exercise" aria-placeholder="Exercise">
+        <option value="0">No</option>
+        <option value="1">Yes</option>
+    </select>
+
+    <input type="number" name="BP_Systolic" placeholder="BP Systolic">
+    <input type="number" name="BP_Diastolic" placeholder="BP Diastolic">
+
+    <input type="number" name="Follicle_L" placeholder="Follicle No. (L)">
+    <input type="number" name="Follicle_R" placeholder="Follicle No. (R)">
+
+    <input type="number" step="any" name="Avg_F_L" placeholder="Avg F size (L)">
+    <input type="number" step="any" name="Avg_F_R" placeholder="Avg F size (R)">
+
+    <input type="number" step="any" name="Endometrium" placeholder="Endometrium">
+
+    <button type="submit">Predict</button>
+
+</form>
+
+</body>
+</html>
+{% if prediction_text %}
+    <h2 style="text-align:center; color:green;">
+        {{ prediction_text }}
+    </h2>
+{% endif %}

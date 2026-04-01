@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Community</title>
+
+    <style>
+        body {
+            font-family: Arial;
+            background: #f4f7fb;
+            padding: 20px;
+        }
+
+        h2 {
+            text-align: center;
+        }
+
+        .post-box {
+            width: 400px;
+            margin: auto;
+        }
+
+        textarea {
+            width: 100%;
+            height: 80px;
+            padding: 10px;
+        }
+
+        button {
+            width: 100%;
+            padding: 10px;
+            background: #4CAF50;
+            color: white;
+            border: none;
+            margin-top: 5px;
+        }
+
+        .posts {
+            width: 400px;
+            margin: 20px auto;
+        }
+
+        .post {
+            background: white;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+
+<body>
+
+<h2>Community Page</h2>
+
+<div class="post-box">
+    <form action="/add_post" method="post">
+        <textarea name="content" placeholder="Share something..."></textarea>
+        <button type="submit">Post</button>
+    </form>
+</div>
+
+<div class="posts">
+    {% for post in posts %}
+        <div class="post">
+            {{ post[1] }}
+        </div>
+    {% endfor %}
+</div>
+
+</body>
+</html>

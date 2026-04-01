@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Login / Signup</title>
+
+    <style>
+        body {
+            font-family: Arial;
+            background: #f4f7fb;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            width: 350px;
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+
+        h2 {
+            text-align: center;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            margin: 8px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        button {
+            width: 100%;
+            padding: 10px;
+            background: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #45a049;
+        }
+
+        .toggle {
+            text-align: center;
+            margin-top: 10px;
+            color: blue;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <h2 id="formTitle">Login</h2>
+
+    <!-- LOGIN FORM -->
+    <form id="loginForm" action="/login" method="post">
+        <input type="email" name="email" placeholder="Enter Email" required>
+        <input type="password" name="password" placeholder="Enter Password" required>
+        <button type="submit">Login</button>
+    </form>
+
+    <!-- SIGNUP FORM -->
+    <form id="signupForm" action="/signup" method="post" style="display:none;">
+        <input type="email" name="email" placeholder="Enter Email" required>
+        <input type="password" name="password" placeholder="Enter Password" required>
+        <input type="password" name="confirm" placeholder="Confirm Password" required>
+        <button type="submit">Signup</button>
+    </form>
+
+    <div class="toggle" onclick="toggleForm()">
+        Don't have an account? Signup
+    </div>
+
+</div>
+
+<script>
+function toggleForm() {
+    let login = document.getElementById("loginForm");
+    let signup = document.getElementById("signupForm");
+    let title = document.getElementById("formTitle");
+    let toggleText = document.querySelector(".toggle");
+
+    if (login.style.display === "none") {
+        login.style.display = "block";
+        signup.style.display = "none";
+        title.innerText = "Login";
+        toggleText.innerText = "Don't have an account? Signup";
+    } else {
+        login.style.display = "none";
+        signup.style.display = "block";
+        title.innerText = "Signup";
+        toggleText.innerText = "Already have an account? Login";
+    }
+}
+</script>
+
+</body>
+</html>
