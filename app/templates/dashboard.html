@@ -3,7 +3,7 @@
 <head>
     <title>Dashboard</title>
 
-    <style>
+    <!-- <style>
         body {
             font-family: Arial;
             margin: 0;
@@ -65,7 +65,97 @@
             font-size: 16px;
             font-weight: bold;
         }
-    </style>
+    </style> -->
+<style>
+body {
+    margin: 0;
+    font-family: 'Segoe UI', sans-serif;
+    background: linear-gradient(135deg, #e8f5e9, #ffffff);
+}
+
+/* Navbar */
+.navbar {
+    background: linear-gradient(to right, #2e7d32, #4CAF50);
+    padding: 18px;
+    color: white;
+    text-align: center;
+    font-size: 22px;
+    font-weight: bold;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+}
+
+/* Container layout */
+.container {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    margin-top: 70px;
+    flex-wrap: wrap;
+}
+
+/* Card styling */
+.card {
+    width: 250px;
+    height: 170px;
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    font-weight: bold;
+    color: #2e7d32;
+    font-size: 16px;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Hover effect */
+.card:hover {
+    transform: translateY(-12px) scale(1.05);
+    box-shadow: 0 15px 40px rgba(76,175,80,0.3);
+}
+
+/* Top glowing line */
+.card::before {
+    content: "";
+    position: absolute;
+    width: 100%;
+    height: 5px;
+    background: linear-gradient(to right, #4CAF50, #81C784);
+    top: 0;
+    left: 0;
+}
+
+/* Add icon using CSS (NO HTML change) */
+.card:nth-child(1)::after {
+    content: "🩺";
+    position: absolute;
+    top: 15px;
+    font-size: 30px;
+}
+
+.card:nth-child(2)::after {
+    content: "📅";
+    position: absolute;
+    top: 15px;
+    font-size: 30px;
+}
+
+.card:nth-child(3)::after {
+    content: "💬";
+    position: absolute;
+    top: 15px;
+    font-size: 30px;
+}
+
+/* Link styling */
+a {
+    text-decoration: none;
+}
+</style>
 </head>
 
 <body>

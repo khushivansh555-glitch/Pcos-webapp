@@ -2,7 +2,78 @@
 <html>
 <head>
     <title>PCOS Prediction</title>
-    <style>
+ <style>
+body {
+    font-family: 'Segoe UI', sans-serif;
+    background: linear-gradient(135deg, #e8f5e9, #ffffff);
+    padding: 20px;
+}
+
+/* Form Container */
+.form-box {
+    width: 550px;
+    margin: auto;
+    background: rgba(255,255,255,0.95);
+    padding: 30px;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    backdrop-filter: blur(10px);
+}
+
+/* Heading */
+h2 {
+    text-align: center;
+    color: #2e7d32;
+    margin-bottom: 20px;
+}
+
+/* Inputs */
+input, select {
+    width: 100%;
+    padding: 12px;
+    margin: 8px 0;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    transition: 0.2s;
+}
+
+/* Input Focus */
+input:focus, select:focus {
+    border-color: #4CAF50;
+    outline: none;
+    box-shadow: 0 0 5px rgba(76,175,80,0.3);
+}
+
+/* Button */
+button {
+    width: 100%;
+    padding: 12px;
+    background: linear-gradient(to right, #4CAF50, #2e7d32);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 15px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+button:hover {
+    transform: scale(1.03);
+}
+
+/* Result Box */
+.result {
+    margin-top: 20px;
+    padding: 15px;
+    background: linear-gradient(to right, #c8e6c9, #e8f5e9);
+    border-radius: 10px;
+    text-align: center;
+    font-weight: bold;
+    color: #1b5e20;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+</style>
+    <!-- <style>
         body {
             font-family: Arial;
             background-color: #f4fff4;
@@ -31,7 +102,7 @@
             border: none;
             font-size: 16px;
         }
-    </style>
+    </style> -->
 </head>
 <body>
 
