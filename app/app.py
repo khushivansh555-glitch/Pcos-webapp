@@ -76,8 +76,6 @@ def predict():
 
 
 
-# ---------------- ADD BELOW YOUR EXISTING CODE ---------------- #
-
 from flask import render_template, request, redirect
 import sqlite3
 import re
