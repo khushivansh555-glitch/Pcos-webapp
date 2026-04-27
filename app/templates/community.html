@@ -79,6 +79,143 @@ button {
     background: linear-gradient(#4CAF50, #81C784);
     border-radius: 12px 0 0 12px;
 }
+
+.chatbot-toggle {
+    position: fixed;
+    right: 25px;
+    bottom: 25px;
+    background: linear-gradient(135deg, #ff8a80, #ff5252);
+    color: white;
+    border: none;
+    border-radius: 999px;
+    padding: 14px 20px;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+    cursor: pointer;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    z-index: 1000;
+}
+
+.chatbot-panel {
+    position: fixed;
+    right: 25px;
+    bottom: 80px;
+    width: 360px;
+    max-height: 520px;
+    background: rgba(255, 255, 255, 0.98);
+    border-radius: 24px;
+    box-shadow: 0 30px 60px rgba(0,0,0,0.25);
+    display: none;
+    flex-direction: column;
+    overflow: hidden;
+    z-index: 1000;
+}
+
+.chatbot-panel.open {
+    display: flex;
+}
+
+.chatbot-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 18px 20px;
+    background: linear-gradient(135deg, #f48fb1, #ce93d8);
+    color: white;
+}
+
+.chatbot-name {
+    font-size: 1.15rem;
+    font-weight: 700;
+}
+
+.chatbot-tagline {
+    font-size: 0.9rem;
+    opacity: 0.92;
+}
+
+.chatbot-close {
+    background: transparent;
+    border: none;
+    color: white;
+    font-size: 1.5rem;
+    cursor: pointer;
+    line-height: 1;
+}
+
+.chatbot-messages {
+    flex: 1;
+    padding: 18px 20px;
+    overflow-y: auto;
+    background: #fafafa;
+}
+
+.chatbot-message {
+    margin-bottom: 14px;
+    line-height: 1.6;
+    max-width: 85%;
+    padding: 12px 16px;
+    border-radius: 20px;
+}
+
+.chatbot-message.bot {
+    background: #e8f0ff;
+    color: #1b1f3b;
+    align-self: flex-start;
+}
+
+.chatbot-message.user {
+    background: #4caf50;
+    color: white;
+    align-self: flex-end;
+}
+
+.chatbot-input-area {
+    display: flex;
+    border-top: 1px solid #e0e0e0;
+    padding: 12px 16px;
+    gap: 10px;
+    background: white;
+}
+
+.chatbot-input-area input {
+    flex: 1;
+    border: 1px solid #ddd;
+    border-radius: 999px;
+    padding: 12px 16px;
+    outline: none;
+}
+
+.chatbot-input-area button {
+    min-width: 80px;
+    border-radius: 999px;
+    background: linear-gradient(135deg, #6a1b9a, #8e24aa);
+    border: none;
+    color: white;
+    cursor: pointer;
+}
+
+.chatbot-suggestions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    padding: 14px 18px 18px;
+    background: white;
+}
+
+.chatbot-suggestion {
+    padding: 8px 12px;
+    border: 1px solid #d1c4e9;
+    border-radius: 999px;
+    background: white;
+    color: #4a148c;
+    cursor: pointer;
+    font-size: 0.9rem;
+}
+
+.chatbot-suggestion:hover {
+    background: #f3e5f5;
+}
 </style>
     <!-- <style>
         body {
@@ -144,5 +281,130 @@ button {
     {% endfor %}
 </div>
 
+<div class="chatbot-toggle" id="chatbotToggle">Ask Menstruly</div>
+<div class="chatbot-panel" id="chatbotPanel" aria-hidden="true">
+    <div class="chatbot-header">
+        <div>
+            <div class="chatbot-name">Menstruly</div>
+            <div class="chatbot-tagline">Your friendly PCOS companion</div>
+        </div>
+        <button class="chatbot-close" id="chatbotClose" aria-label="Close chat">×</button>
+    </div>
+    <div class="chatbot-messages" id="chatbotMessages">
+        <div class="chatbot-message bot">
+            Hi there! I’m Menstruly. 💕 Ask me about PCOS, symptoms, diet, precautions, food ideas, or mood support — I’m here to help.
+        </div>
+    </div>
+    <form class="chatbot-input-area" id="chatbotForm">
+        <input type="text" id="chatbotInput" placeholder="Type your question here..." autocomplete="off" />
+        <button type="submit">Send</button>
+    </form>
+    <div class="chatbot-suggestions">
+        <button type="button" class="chatbot-suggestion">What is PCOS?</button>
+        <button type="button" class="chatbot-suggestion">Diet tips</button>
+        <button type="button" class="chatbot-suggestion">Mood support</button>
+    </div>
+</div>
+
+<script>
+const chatbotToggle = document.getElementById('chatbotToggle');
+const chatbotPanel = document.getElementById('chatbotPanel');
+const chatbotClose = document.getElementById('chatbotClose');
+const chatbotForm = document.getElementById('chatbotForm');
+const chatbotInput = document.getElementById('chatbotInput');
+const chatbotMessages = document.getElementById('chatbotMessages');
+const suggestionButtons = document.querySelectorAll('.chatbot-suggestion');
+
+const knowledge = [
+    {
+        triggers: ['pcos', 'what is pcos', 'polycystic', 'poly cystic'],
+        replies: [
+            'PCOS stands for Polycystic Ovary Syndrome. It is a hormonal condition that can affect your periods, metabolism, mood, skin, and energy. I’m here to answer your questions with care.',
+            'PCOS is a condition caused by hormone imbalance. It may lead to irregular periods, acne, extra hair growth, and mood changes. You are not alone and I’m here to help you learn what feels right for your body.',
+        ]
+    },
+    {
+        triggers: ['symptom', 'symptoms', 'irregular period', 'period', 'acne', 'hair', 'weight', 'fatigue'],
+        replies: [
+            'Common PCOS symptoms include irregular or missed periods, acne, hair growth on the face or body, weight changes, and tiredness. Each person experiences things differently, and I’m here to support you.',
+            'If you notice period changes, skin concerns, or mood ups and downs, these can be linked to PCOS. It helps to talk with a doctor, and I can also share lifestyle ideas to support you every day.',
+        ]
+    },
+    {
+        triggers: ['diet', 'food', 'nutrition', 'meal', 'eat', 'breakfast', 'snack'],
+        replies: [
+            'A balanced PCOS-friendly diet often includes whole grains, lean proteins, vegetables, fruits, healthy fats, and low-glycemic foods. Small, nourishing meals can help your body feel steady and cared for.',
+            'Try foods like oats, lentils, spinach, berries, nuts, yogurt, and grilled chicken or fish. Avoiding very sugary or highly processed snacks can support your energy and hormone balance.',
+        ]
+    },
+    {
+        triggers: ['precaution', 'precautions', 'care', 'exercise', 'workout', 'health'],
+        replies: [
+            'Taking care of PCOS includes gentle exercise, good sleep, stress management, and regular medical checkups. Even short walks, breathing moments, and healthy meals are strong steps toward feeling better.',
+            'You can practice self-care by staying hydrated, choosing balanced foods, getting rest, and moving in ways you enjoy. I’m here to remind you that small, kind habits add up over time.',
+        ]
+    },
+    {
+        triggers: ['mood', 'anxiety', 'stress', 'emotional', 'feel'],
+        replies: [
+            'PCOS can affect mood and that is completely understandable. It’s okay to feel with compassion, and small self-care actions like journaling, gentle movement, or talking to someone can help.',
+            'When your mood feels low or anxious, remind yourself that you deserve kindness and rest. I’m here to support you with calm, friendly reminders and practical tips.',
+        ]
+    },
+    {
+        triggers: ['foods', 'recipes', 'meal ideas', 'what to eat', 'diet plan'],
+        replies: [
+            'Good PCOS foods include leafy greens, chickpeas, whole grains, fresh fruits, healthy fats like olive oil, and lean proteins. I can suggest snack or meal ideas whenever you want.',
+            'For snacks, try cucumber slices with hummus, yogurt with berries and seeds, or a small handful of nuts. Your body will thank you for gentle, nourishing food choices.',
+        ]
+    }
+];
+
+function addMessage(text, sender) {
+    const message = document.createElement('div');
+    message.className = 'chatbot-message ' + sender;
+    message.textContent = text;
+    chatbotMessages.appendChild(message);
+    chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
+}
+
+function getReply(question) {
+    const normalized = question.toLowerCase();
+    for (const item of knowledge) {
+        for (const trigger of item.triggers) {
+            if (normalized.includes(trigger)) {
+                return item.replies[Math.floor(Math.random() * item.replies.length)];
+            }
+        }
+    }
+    return 'That’s a caring question. 💛 I’m here to help with PCOS, symptoms, diet, mood, and self-care. Could you ask me about one of those topics?';
+}
+
+chatbotToggle.addEventListener('click', () => {
+    chatbotPanel.classList.add('open');
+    chatbotPanel.setAttribute('aria-hidden', 'false');
+    chatbotInput.focus();
+});
+chatbotClose.addEventListener('click', () => {
+    chatbotPanel.classList.remove('open');
+    chatbotPanel.setAttribute('aria-hidden', 'true');
+});
+
+chatbotForm.addEventListener('submit', (event) => {
+    event.preventDefault();
+    const userText = chatbotInput.value.trim();
+    if (!userText) return;
+    addMessage(userText, 'user');
+    chatbotInput.value = '';
+    setTimeout(() => addMessage(getReply(userText), 'bot'), 350);
+});
+
+suggestionButtons.forEach(button => {
+    button.addEventListener('click', () => {
+        chatbotInput.value = button.textContent;
+        chatbotForm.dispatchEvent(new Event('submit', { cancelable: true }));
+    });
+});
+</script>
 </body>
 </html>
