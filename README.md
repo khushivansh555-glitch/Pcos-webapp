@@ -5,3 +5,9 @@ It also tracks her menstrual cycles and also mood patterns and then she can also
 It also includes a community page in which now can add only text posts , this phase helps the user to connect with other users and also to share her
 experiences and suggestions with other users also.<br>
 Me and my friend is working on this project.
+
+Email OTP verification is now supported for login. To enable it, set the following environment variables before running the app:
+- `EMAIL_ADDRESS`
+- `EMAIL_PASSWORD`
+- `EMAIL_HOST` (optional, defaults to `smtp.gmail.com`)
+- `EMAIL_PORT` (optional, defaults to `587`)

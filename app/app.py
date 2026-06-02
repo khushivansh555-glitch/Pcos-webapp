@@ -1,6 +1,9 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, redirect, session
 import sys
 import os
+import random
+import smtplib
+from email.message import EmailMessage
 
 # BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -11,6 +14,7 @@ sys.path.append(os.path.join(BASE_DIR, "src"))
 from predict import predict_pcos
 
 app = Flask(__name__)
+app.secret_key = os.environ.get("SECRET_KEY", "super-secret-key")
 
 
 
@@ -113,8 +117,33 @@ init_db()
 # --------- EMAIL VALIDATION --------- #
 
 def is_valid_email(email):
-    pattern = r'^[\w\.-]+@[\w\.-]+\.\w+$'
+    pattern = r'^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$'
     return re.match(pattern, email)
+
+
+def generate_otp():
+    return str(random.randint(100000, 999999))
+
+
+def send_otp_email(recipient_email, otp_code):
+    sender = os.environ.get("EMAIL_ADDRESS")
+    password = os.environ.get("EMAIL_PASSWORD")
+    smtp_host = os.environ.get("EMAIL_HOST", "smtp.gmail.com")
+    smtp_port = int(os.environ.get("EMAIL_PORT", 587))
+
+    if not sender or not password:
+        raise RuntimeError("Email sender credentials are not configured. Set EMAIL_ADDRESS and EMAIL_PASSWORD.")
+
+    message = EmailMessage()
+    message["Subject"] = "Your OTP Code"
+    message["From"] = sender
+    message["To"] = recipient_email
+    message.set_content(f"Your verification OTP is: {otp_code}\n\nIf you did not request this, please ignore this message.")
+
+    with smtplib.SMTP(smtp_host, smtp_port) as server:
+        server.starttls()
+        server.login(sender, password)
+        server.send_message(message)
 
 
 # --------- PAGE ROUTES --------- #
@@ -173,7 +202,7 @@ def community_page():
 
 @app.route("/signup", methods=["POST"])
 def signup():
-    email = request.form["email"]
+    email = request.form["email"].strip().lower()
     password = request.form["password"]
     confirm = request.form["confirm"]
 
@@ -208,7 +237,7 @@ def signup():
 
 @app.route("/login", methods=["POST"])
 def login_user():
-    email = request.form["email"]
+    email = request.form["email"].strip().lower()
     password = request.form["password"]
 
     conn = sqlite3.connect("users.db")
@@ -220,9 +249,54 @@ def login_user():
     conn.close()
 
     if user:
-        return redirect("/dashboard")
+        otp_code = generate_otp()
+        session["pending_email"] = email
+        session["otp_code"] = otp_code
+
+        try:
+            send_otp_email(email, otp_code)
+        except Exception as e:
+            return f"Failed to send OTP: {e}"
+
+        return redirect("/verify")
     else:
         return "Invalid email or password!"
+
+
+@app.route("/verify", methods=["GET", "POST"])
+def verify_email():
+    if "pending_email" not in session:
+        return redirect("/")
+
+    message = None
+    email = session.get("pending_email")
+
+    if request.method == "POST":
+        otp = request.form.get("otp")
+        if otp == session.get("otp_code"):
+            session.pop("otp_code", None)
+            session.pop("pending_email", None)
+            return redirect("/dashboard")
+        message = "Invalid OTP. Please try again."
+
+    return render_template("verify.html", email=email, message=message)
+
+
+@app.route("/resend-otp", methods=["POST"])
+def resend_otp():
+    if "pending_email" not in session:
+        return redirect("/")
+
+    otp_code = generate_otp()
+    session["otp_code"] = otp_code
+
+    try:
+        send_otp_email(session["pending_email"], otp_code)
+    except Exception as e:
+        return f"Failed to resend OTP: {e}"
+
+    return render_template("verify.html", email=session.get("pending_email"), message="OTP resent. Check your email.")
+
 
 if __name__ == "__main__":
     app.run(debug=True)

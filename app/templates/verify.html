@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Verify Email</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #e8f5e9;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            width: 360px;
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+
+        h2 {
+            color: #2e7d32;
+            margin-bottom: 15px;
+        }
+
+        p {
+            color: #555;
+            margin: 10px 0 20px;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            margin: 8px 0;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+        }
+
+        button {
+            width: 100%;
+            padding: 10px;
+            background: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #388e3c;
+        }
+
+        .message {
+            margin: 15px 0;
+            color: #d32f2f;
+        }
+
+        .hint {
+            font-size: 0.95rem;
+            color: #777;
+            margin-bottom: 15px;
+        }
+
+        .resend {
+            margin-top: 10px;
+            font-size: 0.9rem;
+            color: #2e7d32;
+        }
+
+        .resend button {
+            width: auto;
+            padding: 10px 20px;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h2>Email Verification</h2>
+    <p>An OTP has been sent to <strong>{{ email }}</strong>.</p>
+    <p class="hint">Enter the 6-digit code to continue to your dashboard.</p>
+
+    {% if message %}
+    <div class="message">{{ message }}</div>
+    {% endif %}
+
+    <form action="/verify" method="post">
+        <input type="text" name="otp" placeholder="Enter OTP" required maxlength="6">
+        <button type="submit">Verify OTP</button>
+    </form>
+
+    <div class="resend">
+        <form action="/resend-otp" method="post">
+            <button type="submit">Resend OTP</button>
+        </form>
+    </div>
+</div>
+</body>
+</html>
