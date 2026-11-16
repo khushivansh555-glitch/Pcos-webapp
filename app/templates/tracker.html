@@ -1238,155 +1238,419 @@
           resultsSection.scrollIntoView({ behavior: "smooth" });
         });
 
-  document.getElementById("downloadReport").addEventListener("click", () => {
-    const { jsPDF } = window.jspdf;
-    const doc = new jsPDF();
+  // document.getElementById("downloadReport").addEventListener("click", () => {
+  //   const { jsPDF } = window.jspdf;
+  //   const doc = new jsPDF();
 
-    let y = 20;
+  //   let y = 20;
 
-    // add text with automatic page handling
-    function addText(text, size = 10, bold = false) {
-      doc.setFont("helvetica", bold ? "bold" : "normal");
-      doc.setFontSize(size);
+  //   // add text with automatic page handling
+  //   function addText(text, size = 10, bold = false) {
+  //     doc.setFont("helvetica", bold ? "bold" : "normal");
+  //     doc.setFontSize(size);
 
-      const lines = doc.splitTextToSize(String(text), 175);
+  //     const lines = doc.splitTextToSize(String(text), 175);
 
-      if (y + lines.length * 6 > 280) {
-        doc.addPage();
-        y = 20;
-      }
+  //     if (y + lines.length * 6 > 280) {
+  //       doc.addPage();
+  //       y = 20;
+  //     }
 
-      doc.text(lines, 18, y);
-      y += lines.length * 6 + 3;
-    }
+  //     doc.text(lines, 18, y);
+  //     y += lines.length * 6 + 3;
+  //   }
 
-    // section heading
-    function addHeading(text) {
-      y += 5;
-      addText(text, 14, true);
-      y += 2;
-    }
+  //   // section heading
+  //   function addHeading(text) {
+  //     y += 5;
+  //     addText(text, 14, true);
+  //     y += 2;
+  //   }
 
-    // report title
-    addText("MENSTRULY - HEALTH REPORT", 18, true);
-    addText("Generated on: " + new Date().toLocaleDateString());
-    addText("Cycle, Mood and Lifestyle Assessment Report");
+  //   // report title
+  //   addText("MENSTRULY - HEALTH REPORT", 18, true);
+  //   addText("Generated on: " + new Date().toLocaleDateString());
+  //   addText("Cycle, Mood and Lifestyle Assessment Report");
     
-    // cycle tracker results
-    addHeading("1. CYCLE AND MOOD TRACKER");
+  //   // cycle tracker results
+  //   addHeading("1. CYCLE AND MOOD TRACKER");
 
-    const records = getRecords();
+  //   const records = getRecords();
 
-    if (records.length === 0) {
-      addText("No cycle entries have been recorded.");
-    } else {
-      records.forEach((entry, index) => {
-        addText("Cycle Entry " + (index + 1), 11, true);
-        addText("First period date: " + entry.firstDate);
-        addText("Missed period date: " + (entry.missedDate || "Not entered"));
-        addText("Last period date: " + entry.lastDate);
-        addText("Mood: " + entry.mood);
-        y += 3;
-      });
+  //   if (records.length === 0) {
+  //     addText("No cycle entries have been recorded.");
+  //   } else {
+  //     records.forEach((entry, index) => {
+  //       addText("Cycle Entry " + (index + 1), 11, true);
+  //       addText("First period date: " + entry.firstDate);
+  //       addText("Missed period date: " + (entry.missedDate || "Not entered"));
+  //       addText("Last period date: " + entry.lastDate);
+  //       addText("Mood: " + entry.mood);
+  //       y += 3;
+  //     });
+  //   }
+
+  //   // cycle insights
+  //   addHeading("2. CYCLE INSIGHTS");
+
+  //   const analysisItems = document.querySelectorAll("#analysis .analysis-item");
+
+  //   if (analysisItems.length === 0) {
+  //     addText("No cycle insights available yet.");
+  //   } else {
+  //     analysisItems.forEach((item) => {
+  //       addText(item.innerText);
+  //     });
+  //   }
+
+  //   // lifestyle assessment
+  //   addHeading("3. LIFESTYLE ASSESSMENT");
+
+  //   const fields = [
+  //     ["Sleep duration", "sleep"],
+  //     ["Water intake", "water"],
+  //     ["Daily exercise", "exercise"],
+  //     ["Stress level", "stress"],
+  //     ["Fast food frequency", "food"],
+  //     ["Regular meals", "meals"]
+  //   ];
+
+  //   let hasAssessment = true;
+
+  //   fields.forEach(([label, id]) => {
+  //     const value = document.getElementById(id).value;
+
+  //     if (!value) hasAssessment = false;
+
+  //     addText(label + ": " + (value || "Not submitted"));
+  //   });
+
+  //   const selectedSymptoms = Array.from(
+  //     document.querySelectorAll('input[name="symptoms"]:checked')
+  //   ).map((item) => item.value);
+
+  //   addText(
+  //     "Reported symptoms: " +
+  //     (selectedSymptoms.length ? selectedSymptoms.join(", ") : "None selected")
+  //   );
+
+  //   // lifestyle recommendations
+  //   addHeading("4. PERSONALIZED RECOMMENDATIONS");
+
+  //   const recommendations = document.querySelectorAll(
+  //     "#wellnessRecommendations .wellness-card"
+  //   );
+
+  //   if (recommendations.length === 0) {
+  //     addText("No lifestyle recommendations generated yet.");
+  //   } else {
+  //     recommendations.forEach((item) => {
+  //       addText(item.innerText);
+  //     });
+  //   }
+
+  //   // general insights
+  //   addHeading("5. GENERAL INSIGHTS");
+
+  //   const stats = deriveEntryStats(records);
+
+  //   if (stats) {
+  //     addText("Your average recorded cycle interval is " + stats.averageCycle + " days.");
+
+  //     const variation = stats.longestCycle - stats.shortestCycle;
+
+  //     if (variation >= 7) {
+  //       addText(
+  //         "Your recorded cycle intervals show variation. Continue tracking your cycles and discuss persistent irregularity with a healthcare professional."
+  //       );
+  //     } else {
+  //       addText(
+  //         "Your recorded cycle intervals show relatively little variation. Continue tracking to understand your pattern over time."
+  //       );
+  //     }
+
+  //     addText("Your most recently recorded mood is " + stats.current.mood + ".");
+  //   } else {
+  //     addText("Add cycle entries to receive cycle pattern insights.");
+  //   }
+
+  //   if (!hasAssessment) {
+  //     addText("Complete the lifestyle assessment to receive more personalized insights.");
+  //   }
+
+  //   // disclaimer
+  //   addHeading("IMPORTANT NOTE");
+  //   addText(
+  //     "This report is based on information entered by the user. The insights and recommendations are for general awareness only and do not provide a medical diagnosis or replace professional medical advice."
+  //   );
+
+  //   // download
+  //   doc.save("menstruly_health_report.pdf");
+  // });
+
+
+document.getElementById("downloadReport").addEventListener("click", () => {
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF();
+
+  let y = 20;
+
+  // menstruly theme colors
+  const pink = [190, 115, 157];
+  const dark = [91, 55, 78];
+  const lightPink = [250, 239, 246];
+  const lavender = [242, 238, 250];
+  const grey = [105, 98, 108];
+  const white = [255, 255, 255];
+
+  // page spacing
+  function checkPage(height) {
+    if (y + height > 270) {
+      doc.addPage();
+      y = 22;
     }
+  }
 
-    // cycle insights
-    addHeading("2. CYCLE INSIGHTS");
+  // wrapped text
+  function wrapText(text, width) {
+    return doc.splitTextToSize(String(text), width);
+  }
 
-    const analysisItems = document.querySelectorAll("#analysis .analysis-item");
+  // stylish card
+  function addCard(title, content) {
+    const lines = [];
 
-    if (analysisItems.length === 0) {
-      addText("No cycle insights available yet.");
-    } else {
-      analysisItems.forEach((item) => {
-        addText(item.innerText);
-      });
-    }
-
-    // lifestyle assessment
-    addHeading("3. LIFESTYLE ASSESSMENT");
-
-    const fields = [
-      ["Sleep duration", "sleep"],
-      ["Water intake", "water"],
-      ["Daily exercise", "exercise"],
-      ["Stress level", "stress"],
-      ["Fast food frequency", "food"],
-      ["Regular meals", "meals"]
-    ];
-
-    let hasAssessment = true;
-
-    fields.forEach(([label, id]) => {
-      const value = document.getElementById(id).value;
-
-      if (!value) hasAssessment = false;
-
-      addText(label + ": " + (value || "Not submitted"));
+    content.forEach((item) => {
+      const wrapped = wrapText(item, 155);
+      lines.push(...wrapped);
     });
 
-    const selectedSymptoms = Array.from(
-      document.querySelectorAll('input[name="symptoms"]:checked')
-    ).map((item) => item.value);
+    const cardHeight = 17 + lines.length * 6 + 8;
 
-    addText(
-      "Reported symptoms: " +
-      (selectedSymptoms.length ? selectedSymptoms.join(", ") : "None selected")
-    );
+    checkPage(cardHeight);
 
-    // lifestyle recommendations
-    addHeading("4. PERSONALIZED RECOMMENDATIONS");
+    doc.setFillColor(...lightPink);
+    doc.roundedRect(15, y, 180, cardHeight, 4, 4, "F");
 
-    const recommendations = document.querySelectorAll(
-      "#wellnessRecommendations .wellness-card"
-    );
+    doc.setTextColor(...dark);
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(11);
+    doc.text(title, 22, y + 10);
 
-    if (recommendations.length === 0) {
-      addText("No lifestyle recommendations generated yet.");
-    } else {
-      recommendations.forEach((item) => {
-        addText(item.innerText);
-      });
-    }
+    doc.setTextColor(...grey);
+    doc.setFont("helvetica", "normal");
+    doc.setFontSize(9);
 
-    // general insights
-    addHeading("5. GENERAL INSIGHTS");
+    let textY = y + 20;
 
-    const stats = deriveEntryStats(records);
+    lines.forEach((line) => {
+      doc.text(line, 22, textY);
+      textY += 6;
+    });
 
-    if (stats) {
-      addText("Your average recorded cycle interval is " + stats.averageCycle + " days.");
+    y += cardHeight + 7;
+  }
 
-      const variation = stats.longestCycle - stats.shortestCycle;
+  // section heading
+  function addSection(title, number) {
+    checkPage(22);
 
-      if (variation >= 7) {
-        addText(
-          "Your recorded cycle intervals show variation. Continue tracking your cycles and discuss persistent irregularity with a healthcare professional."
-        );
-      } else {
-        addText(
-          "Your recorded cycle intervals show relatively little variation. Continue tracking to understand your pattern over time."
-        );
-      }
+    y += 5;
 
-      addText("Your most recently recorded mood is " + stats.current.mood + ".");
-    } else {
-      addText("Add cycle entries to receive cycle pattern insights.");
-    }
+    doc.setFillColor(...pink);
+    doc.roundedRect(15, y - 5, 9, 9, 2, 2, "F");
 
-    if (!hasAssessment) {
-      addText("Complete the lifestyle assessment to receive more personalized insights.");
-    }
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(13);
+    doc.setTextColor(...dark);
+    doc.text(number, 17.2, y + 1);
 
-    // disclaimer
-    addHeading("IMPORTANT NOTE");
-    addText(
-      "This report is based on information entered by the user. The insights and recommendations are for general awareness only and do not provide a medical diagnosis or replace professional medical advice."
-    );
+    doc.text(title, 29, y + 1);
 
-    // download
-    doc.save("menstruly_health_report.pdf");
+    y += 12;
+  }
+
+  // cover header
+  doc.setFillColor(...lightPink);
+  doc.rect(0, 0, 210, 48, "F");
+
+  doc.setTextColor(...dark);
+  doc.setFont("helvetica", "bold");
+  doc.setFontSize(25);
+  doc.text("menstruly", 17, 20);
+
+  doc.setFontSize(13);
+  doc.text("YOUR HEALTH, YOUR JOURNEY.", 17, 31);
+
+  doc.setFont("helvetica", "normal");
+  doc.setFontSize(9);
+  doc.setTextColor(...grey);
+  doc.text("PERSONAL CYCLE & WELLNESS REPORT", 17, 39);
+
+  doc.setFillColor(...pink);
+  doc.roundedRect(145, 13, 48, 12, 4, 4, "F");
+
+  doc.setTextColor(...white);
+  doc.setFont("helvetica", "bold");
+  doc.setFontSize(8);
+  doc.text("HEALTH REPORT", 169, 20.5, { align: "center" });
+
+  y = 59;
+
+  doc.setFont("helvetica", "normal");
+  doc.setFontSize(9);
+  doc.setTextColor(...grey);
+  doc.text(
+    "Generated on: " + new Date().toLocaleDateString(),
+    17,
+    y
+  );
+
+  y += 12;
+
+  // 1. cycle and mood tracker
+  addSection("Cycle & Mood Tracker", "01");
+
+  const records = getRecords();
+
+  if (records.length === 0) {
+    addCard("Cycle records", ["No cycle entries have been recorded."]);
+  } else {
+    records.forEach((entry, index) => {
+      addCard("Cycle Entry " + (index + 1), [
+        "First period date: " + entry.firstDate,
+        "Missed period date: " + (entry.missedDate || "Not entered"),
+        "Last period date: " + entry.lastDate,
+        "Mood: " + entry.mood
+      ]);
+    });
+  }
+
+  // 2. cycle insights
+  addSection("Cycle Insights", "02");
+
+  const analysisItems = document.querySelectorAll(
+    "#analysis .analysis-item"
+  );
+
+  if (analysisItems.length === 0) {
+    addCard("Cycle analysis", ["No cycle insights available yet."]);
+  } else {
+    analysisItems.forEach((item, index) => {
+      addCard("Insight " + (index + 1), [item.innerText]);
+    });
+  }
+
+  // 3. lifestyle assessment
+  addSection("Lifestyle Assessment", "03");
+
+  const fields = [
+    ["Sleep duration", "sleep"],
+    ["Water intake", "water"],
+    ["Daily exercise", "exercise"],
+    ["Stress level", "stress"],
+    ["Fast food frequency", "food"],
+    ["Regular meals", "meals"]
+  ];
+
+  const lifestyleAnswers = fields.map(([label, id]) => {
+    const value = document.getElementById(id).value;
+    return label + ": " + (value || "Not submitted");
   });
+
+  const selectedSymptoms = Array.from(
+    document.querySelectorAll('input[name="symptoms"]:checked')
+  ).map((item) => item.value);
+
+  lifestyleAnswers.push(
+    "Reported symptoms: " +
+    (selectedSymptoms.length
+      ? selectedSymptoms.join(", ")
+      : "None selected")
+  );
+
+  addCard("Your lifestyle responses", lifestyleAnswers);
+
+  // 4. personalized recommendations
+  addSection("Personalized Recommendations", "04");
+
+  const recommendations = document.querySelectorAll(
+    "#wellnessRecommendations .wellness-card"
+  );
+
+  if (recommendations.length === 0) {
+    addCard("Recommendations", [
+      "No lifestyle recommendations generated yet."
+    ]);
+  } else {
+    recommendations.forEach((item, index) => {
+      addCard(
+        "Recommendation " + (index + 1),
+        [item.innerText]
+      );
+    });
+  }
+
+  // 5. general insights
+  addSection("General Insights", "05");
+
+  const stats = deriveEntryStats(records);
+
+  if (stats) {
+    addCard("Your cycle observations", [
+      "Your average recorded cycle interval is " +
+        stats.averageCycle + " days.",
+      stats.longestCycle - stats.shortestCycle >= 7
+        ? "Your recorded cycle intervals show variation. Continue tracking your cycles and discuss persistent irregularity with a healthcare professional."
+        : "Your recorded cycle intervals show relatively little variation. Continue tracking to understand your pattern over time.",
+      "Your most recently recorded mood is " + stats.current.mood + "."
+    ]);
+  } else {
+    addCard("Cycle observations", [
+      "Add cycle entries to receive cycle pattern insights."
+    ]);
+  }
+
+  if (
+    fields.some(([label, id]) => !document.getElementById(id).value)
+  ) {
+    addCard("Lifestyle reminder", [
+      "Complete the lifestyle assessment to receive more personalized insights."
+    ]);
+  }
+
+  // important note
+  addSection("Important Note", "06");
+
+  addCard("Health disclaimer", [
+    "This report is based on information entered by the user. The insights and recommendations are for general awareness only and do not provide a medical diagnosis or replace professional medical advice."
+  ]);
+
+  // footer on every page
+  const pageCount = doc.getNumberOfPages();
+
+  for (let i = 1; i <= pageCount; i++) {
+    doc.setPage(i);
+
+    doc.setDrawColor(230, 210, 224);
+    doc.line(15, 282, 195, 282);
+
+    doc.setFont("helvetica", "normal");
+    doc.setFontSize(8);
+    doc.setTextColor(...grey);
+
+    doc.text("menstruly | Your wellness journey", 17, 289);
+    doc.text(
+      "Page " + i + " of " + pageCount,
+      193,
+      289,
+      { align: "right" }
+    );
+  }
+
+  doc.save("menstruly_health_report.pdf");
+});
+
 
     </script>
   </body>
