@@ -1,622 +1,1230 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
+  <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Cycle & Mood Tracker</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-        :root {
-            color-scheme: light;
-            font-family: 'Inter', sans-serif;
-            background: linear-gradient(180deg, #ecfdf5 0%, #ffffff 80%);
-            color: #14532d;
-        }
+      :root {
+        color-scheme: light;
+        font-family: "Inter", sans-serif;
+        background: linear-gradient(180deg, #ecfdf5 0%, #ffffff 80%);
+        color: #14532d;
+      }
 
-        body {
-            margin: 0;
-            padding: 24px;
-        }
+      body {
+        margin: 0;
+        padding: 24px;
+      }
 
-        .page-shell {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: grid;
-            gap: 24px;
-        }
+      .page-shell {
+        max-width: 1200px;
+        margin: 0 auto;
+        display: grid;
+        gap: 24px;
+      }
 
-        header {
-            display: flex;
-            align-items: flex-end;
-            justify-content: space-between;
-            gap: 16px;
-        }
+      header {
+        display: flex;
+        align-items: flex-end;
+        justify-content: space-between;
+        gap: 16px;
+      }
 
-        header h1 {
-            margin: 0;
-            font-size: 2rem;
-            color: #14532d;
-        }
+      header h1 {
+        margin: 0;
+        font-size: 2rem;
+        color: #14532d;
+      }
 
-        .section-card {
-            background: #ffffff;
-            border-radius: 24px;
-            box-shadow: 0 20px 40px rgba(16, 185, 129, 0.12);
-            padding: 24px;
-            border: 1px solid #d1fae5;
-        }
+      .section-card {
+        background: #ffffff;
+        border-radius: 24px;
+        box-shadow: 0 20px 40px rgba(16, 185, 129, 0.12);
+        padding: 24px;
+        border: 1px solid #d1fae5;
+      }
 
-        .form-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-        }
+      .form-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+      }
 
-        .form-group {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
+      .form-group {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
 
-        .form-group label {
-            font-weight: 600;
-            color: #166534;
-        }
+      .form-group label {
+        font-weight: 600;
+        color: #166534;
+      }
 
-        .form-group input,
-        .form-group select {
-            border: 1px solid #bbf7d0;
-            border-radius: 14px;
-            padding: 12px 14px;
-            font-size: 0.95rem;
-            outline: none;
-            transition: border-color 0.2s ease, box-shadow 0.2s ease;
-            background: #f8faf5;
-        }
+      .form-group input,
+      .form-group select {
+        border: 1px solid #bbf7d0;
+        border-radius: 14px;
+        padding: 12px 14px;
+        font-size: 0.95rem;
+        outline: none;
+        transition:
+          border-color 0.2s ease,
+          box-shadow 0.2s ease;
+        background: #f8faf5;
+      }
 
-        .form-group input:focus,
-        .form-group select:focus {
-            border-color: #34d399;
-            box-shadow: 0 0 0 3px rgba(134, 239, 172, 0.25);
-        }
+      .form-group input:focus,
+      .form-group select:focus {
+        border-color: #34d399;
+        box-shadow: 0 0 0 3px rgba(134, 239, 172, 0.25);
+      }
 
-        .button-row {
-            display: flex;
-            gap: 12px;
-            flex-wrap: wrap;
-            margin-top: 16px;
-        }
+      .button-row {
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+        margin-top: 16px;
+      }
 
-        button {
-            border: none;
-            border-radius: 999px;
-            padding: 12px 24px;
-            font-size: 0.95rem;
-            cursor: pointer;
-            transition: transform 0.15s ease, box-shadow 0.15s ease;
-        }
+      button {
+        border: none;
+        border-radius: 999px;
+        padding: 12px 24px;
+        font-size: 0.95rem;
+        cursor: pointer;
+        transition:
+          transform 0.15s ease,
+          box-shadow 0.15s ease;
+      }
 
-        button:hover {
-            transform: translateY(-1px);
-        }
+      button:hover {
+        transform: translateY(-1px);
+      }
 
-        .btn-primary {
-            background: #16a34a;
-            color: white;
-            box-shadow: 0 10px 24px rgba(22, 163, 74, 0.18);
-        }
+      .btn-primary {
+        background: #16a34a;
+        color: white;
+        box-shadow: 0 10px 24px rgba(22, 163, 74, 0.18);
+      }
 
-        .btn-secondary {
-            background: #dcfce7;
-            color: #166534;
-        }
+      .btn-secondary {
+        background: #dcfce7;
+        color: #166534;
+      }
 
+      .charts-grid {
+        display: grid;
+        grid-template-columns: 1.15fr 0.85fr;
+        gap: 24px;
+      }
+
+      .chart-card {
+        padding: 20px;
+        border-radius: 24px;
+        background: #ffffff;
+        border: 1px solid #d1fae5;
+      }
+
+      .chart-card h3 {
+        margin: 0 0 16px;
+        font-size: 1.1rem;
+        color: #14532d;
+      }
+
+      canvas {
+        max-width: 100%;
+        height: 320px;
+      }
+
+      .analysis-list {
+        display: grid;
+        gap: 12px;
+        margin-top: 18px;
+      }
+
+      .analysis-item {
+        background: #ecfdf5;
+        border-radius: 16px;
+        padding: 16px;
+        border: 1px solid #bbf7d0;
+      }
+
+      .analysis-item strong {
+        display: block;
+        margin-bottom: 6px;
+        color: #14532d;
+      }
+
+      .notice {
+        margin-top: 14px;
+        padding: 14px 16px;
+        border-radius: 16px;
+        background: #dcfce7;
+        color: #14532d;
+        border: 1px solid #bbf7d0;
+      }
+
+      .popup {
+        position: fixed;
+        inset: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba(15, 23, 42, 0.28);
+        z-index: 10;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.2s ease;
+      }
+
+      .popup.show {
+        opacity: 1;
+        pointer-events: auto;
+      }
+
+      .popup-card {
+        width: min(360px, 90%);
+        background: white;
+        border-radius: 24px;
+        padding: 28px;
+        box-shadow: 0 28px 60px rgba(15, 23, 42, 0.18);
+        text-align: center;
+        border: 1px solid #bbf7d0;
+      }
+
+      .popup-card p {
+        margin: 0 0 18px;
+        color: #14532d;
+        font-size: 1.05rem;
+        line-height: 1.6;
+      }
+
+      .popup-card button {
+        width: 100%;
+        background: #16a34a;
+        color: white;
+      }
+
+      @media (max-width: 960px) {
+        .form-grid,
         .charts-grid {
-            display: grid;
-            grid-template-columns: 1.15fr 0.85fr;
-            gap: 24px;
+          grid-template-columns: 1fr;
         }
+      }
 
-        .chart-card {
-            padding: 20px;
-            border-radius: 24px;
-            background: #ffffff;
-            border: 1px solid #d1fae5;
-        }
+      .recommendation-card {
+        background: #ecfdf5;
+        border: 1px solid #bbf7d0;
+        border-left: 5px solid #16a34a;
+        border-radius: 16px;
+        padding: 18px;
+      }
 
-        .chart-card h3 {
-            margin: 0 0 16px;
-            font-size: 1.1rem;
-            color: #14532d;
-        }
+      .recommendation-card strong {
+        display: block;
+        color: #14532d;
+        margin-bottom: 8px;
+        font-size: 1rem;
+      }
 
-        canvas {
-            max-width: 100%;
-            height: 320px;
-        }
+      .recommendation-card p {
+        color: #475569;
+        line-height: 1.6;
+        margin: 0;
+      }
 
-        .analysis-list {
-            display: grid;
-            gap: 12px;
-            margin-top: 18px;
-        }
+      #wellnessForm input[type="checkbox"] {
+        accent-color: #16a34a;
+        margin-right: 8px;
+      }
 
-        .analysis-item {
-            background: #ecfdf5;
-            border-radius: 16px;
-            padding: 16px;
-            border: 1px solid #bbf7d0;
-        }
+      #wellnessForm > .form-group > label {
+        display: block;
+        margin-bottom: 10px;
+      }
 
-        .analysis-item strong {
-            display: block;
-            margin-bottom: 6px;
-            color: #14532d;
-        }
+      #wellnessForm .form-group label:has(input[type="checkbox"]) {
+        font-weight: 400;
+        margin: 8px 0;
+      }
 
-        .notice {
-            margin-top: 14px;
-            padding: 14px 16px;
-            border-radius: 16px;
-            background: #dcfce7;
-            color: #14532d;
-            border: 1px solid #bbf7d0;
-        }
+      .wellness-card {
+        background: #ecfdf5;
+        border: 1px solid #bbf7d0;
+        border-left: 5px solid #16a34a;
+        border-radius: 16px;
+        padding: 18px;
+      }
 
-        .popup {
-            position: fixed;
-            inset: 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: rgba(15, 23, 42, 0.28);
-            z-index: 10;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.2s ease;
-        }
+      .wellness-card h3 {
+        color: #166534;
+        margin: 0 0 8px;
+      }
 
-        .popup.show {
-            opacity: 1;
-            pointer-events: auto;
-        }
+      .wellness-card p {
+        color: #475569;
+        line-height: 1.6;
+        margin: 0;
+      }
 
-        .popup-card {
-            width: min(360px, 90%);
-            background: white;
-            border-radius: 24px;
-            padding: 28px;
-            box-shadow: 0 28px 60px rgba(15, 23, 42, 0.18);
-            text-align: center;
-            border: 1px solid #bbf7d0;
-        }
-
-        .popup-card p {
-            margin: 0 0 18px;
-            color: #14532d;
-            font-size: 1.05rem;
-            line-height: 1.6;
-        }
-
-        .popup-card button {
-            width: 100%;
-            background: #16a34a;
-            color: white;
-        }
-
-        @media (max-width: 960px) {
-            .form-grid,
-            .charts-grid {
-                grid-template-columns: 1fr;
-            }
-        }
+      .wellness-tag {
+        display: inline-block;
+        color: #166534;
+        background: #dcfce7;
+        padding: 5px 10px;
+        border-radius: 20px;
+        font-size: 12px;
+        margin-bottom: 10px;
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
     <div class="page-shell">
-        <header>
-            <div>
-                <p style="margin:0; color:#64748b; letter-spacing:.02em; text-transform: uppercase; font-size:.8rem;">PCOS Support</p>
-                <h1>Cycle & Mood Tracker</h1>
-            </div>
-            <div style="text-align:right; color:#475569; max-width:320px;">
-                Track period dates, mood, and trends so you can analyze patterns and predict your cycle more confidently.
-            </div>
-        </header>
-
-        <section class="section-card">
-            <h2 style="margin-top:0;">Add a new cycle entry</h2>
-            <div class="form-grid">
-                <div class="form-group">
-                    <label for="firstDate">First period date</label>
-                    <input id="firstDate" type="date" />
-                </div>
-                <div class="form-group">
-                    <label for="missedDate">Missed period date (optional)</label>
-                    <input id="missedDate" type="date" />
-                </div>
-                <div class="form-group">
-                    <label for="lastDate">Last period date</label>
-                    <input id="lastDate" type="date" />
-                </div>
-                <div class="form-group">
-                    <label for="moodSelect">How do you feel?</label>
-                    <select id="moodSelect">
-                        <option value="Happy">Happy</option>
-                        <option value="Calm">Calm</option>
-                        <option value="Tired">Tired</option>
-                        <option value="Anxious">Anxious</option>
-                        <option value="Sad">Sad</option>
-                        <option value="Irritable">Irritable</option>
-                    </select>
-                </div>
-            </div>
-            <div class="button-row">
-                <button id="saveEntry" class="btn-primary">Save entry</button>
-                <button id="clearAll" class="btn-secondary">Clear saved data</button>
-            </div>
-            <div id="message" class="notice" style="display:none"></div>
-        </section>
-        <div id="successPopup" class="popup" role="dialog" aria-modal="true" aria-labelledby="popupTitle">
-            <div class="popup-card">
-                <p id="popupTitle">Saved dates successfully!</p>
-                <button id="closePopup" type="button">OK</button>
-            </div>
+      <header>
+        <div>
+          <p
+            style="
+              margin: 0;
+              color: #64748b;
+              letter-spacing: 0.02em;
+              text-transform: uppercase;
+              font-size: 0.8rem;
+            "
+          >
+            PCOS Support
+          </p>
+          <h1>Cycle & Mood Tracker</h1>
         </div>
+        <div style="text-align: right; color: #475569; max-width: 320px">
+          Track period dates, mood, and trends so you can analyze patterns and
+          predict your cycle more confidently.
+        </div>
+      </header>
 
-        <section class="charts-grid">
-            <div class="chart-card">
-                <h3>Cycle Trend</h3>
-                <canvas id="cycleTrendChart"></canvas>
-            </div>
-            <div class="chart-card">
-                <h3>Mood Distribution</h3>
-                <canvas id="moodDistributionChart"></canvas>
-            </div>
-            <div class="chart-card">
-                <h3>Mood History</h3>
-                <canvas id="moodHistoryChart"></canvas>
-            </div>
-            <div class="chart-card">
-                <h3>Cycle Pattern Summary</h3>
-                <canvas id="cyclePatternChart"></canvas>
-            </div>
-        </section>
+      <section class="section-card">
+        <h2 style="margin-top: 0">Add a new cycle entry</h2>
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="firstDate">First period date</label>
+            <input id="firstDate" type="date" />
+          </div>
+          <div class="form-group">
+            <label for="missedDate">Missed period date (optional)</label>
+            <input id="missedDate" type="date" />
+          </div>
+          <div class="form-group">
+            <label for="lastDate">Last period date</label>
+            <input id="lastDate" type="date" />
+          </div>
+          <div class="form-group">
+            <label for="moodSelect">How do you feel?</label>
+            <select id="moodSelect">
+              <option value="Happy">Happy</option>
+              <option value="Calm">Calm</option>
+              <option value="Tired">Tired</option>
+              <option value="Anxious">Anxious</option>
+              <option value="Sad">Sad</option>
+              <option value="Irritable">Irritable</option>
+            </select>
+          </div>
+        </div>
+        <div class="button-row">
+          <button id="saveEntry" class="btn-primary">Save entry</button>
+          <button id="clearAll" class="btn-secondary">Clear saved data</button>
+        </div>
+        <div id="message" class="notice" style="display: none"></div>
+      </section>
+      <div
+        id="successPopup"
+        class="popup"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="popupTitle"
+      >
+        <div class="popup-card">
+          <p id="popupTitle">Saved dates successfully!</p>
+          <button id="closePopup" type="button">OK</button>
+        </div>
+      </div>
 
-        <section class="section-card">
-            <h2 style="margin-top:0;">Insights & analysis</h2>
-            <div id="analysis" class="analysis-list"></div>
-        </section>
+      <section class="section-card">
+        <h2 style="margin-top: 0">Personalized Lifestyle Assessment</h2>
+        <p>
+          Fill in your daily habits to receive personalized wellness
+          recommendations.
+        </p>
+
+        <form id="wellnessForm">
+          <div class="form-grid">
+            <div class="form-group">
+              <label for="sleep">How many hours do you sleep daily?</label>
+              <select id="sleep" required>
+                <option value="">Select hours</option>
+                <option value="less">Less than 5 hours</option>
+                <option value="medium">5–7 hours</option>
+                <option value="good">7–9 hours</option>
+                <option value="more">More than 9 hours</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="water">How many glasses of water do you drink?</label>
+              <select id="water" required>
+                <option value="">Select amount</option>
+                <option value="low">Less than 4 glasses</option>
+                <option value="medium">4–6 glasses</option>
+                <option value="good">7–9 glasses</option>
+                <option value="high">More than 9 glasses</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="exercise">How much do you exercise daily?</label>
+              <select id="exercise" required>
+                <option value="">Select duration</option>
+                <option value="none">No exercise</option>
+                <option value="low">Less than 20 minutes</option>
+                <option value="moderate">20–30 minutes</option>
+                <option value="high">More than 30 minutes</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="stress">How would you rate your stress?</label>
+              <select id="stress" required>
+                <option value="">Select stress level</option>
+                <option value="low">Low</option>
+                <option value="medium">Moderate</option>
+                <option value="high">High</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="food">How often do you eat fast food?</label>
+              <select id="food" required>
+                <option value="">Select frequency</option>
+                <option value="rarely">Rarely</option>
+                <option value="sometimes">Sometimes</option>
+                <option value="often">Frequently</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="meals">Do you eat meals regularly?</label>
+              <select id="meals" required>
+                <option value="">Select option</option>
+                <option value="yes">Yes, regularly</option>
+                <option value="sometimes">Sometimes skip meals</option>
+                <option value="no">Frequently skip meals</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group" style="margin-top: 20px">
+            <label>Which symptoms are you currently experiencing?</label>
+
+            <label
+              ><input type="checkbox" name="symptoms" value="fatigue" />
+              Fatigue</label
+            >
+            <label
+              ><input type="checkbox" name="symptoms" value="bloating" />
+              Bloating</label
+            >
+            <label
+              ><input type="checkbox" name="symptoms" value="acne" />
+              Acne</label
+            >
+            <label
+              ><input type="checkbox" name="symptoms" value="cramps" />
+              Menstrual cramps</label
+            >
+            <label
+              ><input type="checkbox" name="symptoms" value="hairfall" /> Hair
+              fall</label
+            >
+            <label
+              ><input type="checkbox" name="symptoms" value="none" />
+              None</label
+            >
+          </div>
+
+          <div class="button-row">
+            <button type="submit" class="btn-primary">
+              Get My Recommendations
+            </button>
+            <button type="reset" class="btn-secondary">Reset Form</button>
+          </div>
+        </form>
+
+        <div id="wellnessResults" style="display: none; margin-top: 25px">
+          <h2>Your Personalized Recommendations</h2>
+          <div id="wellnessRecommendations" class="analysis-list"></div>
+        </div>
+      </section>
+
+      <section class="charts-grid">
+        <div class="chart-card">
+          <h3>Cycle Trend</h3>
+          <canvas id="cycleTrendChart"></canvas>
+        </div>
+        <div class="chart-card">
+          <h3>Mood Distribution</h3>
+          <canvas id="moodDistributionChart"></canvas>
+        </div>
+        <div class="chart-card">
+          <h3>Mood History</h3>
+          <canvas id="moodHistoryChart"></canvas>
+        </div>
+        <div class="chart-card">
+          <h3>Cycle Pattern Summary</h3>
+          <canvas id="cyclePatternChart"></canvas>
+        </div>
+      </section>
+
+      <section class="section-card">
+        <h2 style="margin-top: 0">Insights & analysis</h2>
+        <div id="analysis" class="analysis-list"></div>
+      </section>
     </div>
 
     <script>
-        const STORAGE_KEY = 'pcosTrackerRecords';
+      const STORAGE_KEY = "pcosTrackerRecords";
 
-        const moodValues = {
-            Happy: 5,
-            Calm: 4,
-            Tired: 2,
-            Anxious: 1,
-            Sad: 1,
-            Irritable: 2
+      const moodValues = {
+        Happy: 5,
+        Calm: 4,
+        Tired: 2,
+        Anxious: 1,
+        Sad: 1,
+        Irritable: 2,
+      };
+
+      const moodColors = {
+        Happy: "#22c55e",
+        Calm: "#38bdf8",
+        Tired: "#f59e0b",
+        Anxious: "#f97316",
+        Sad: "#6366f1",
+        Irritable: "#ef4444",
+      };
+
+      const firstDateInput = document.getElementById("firstDate");
+      const missedDateInput = document.getElementById("missedDate");
+      const lastDateInput = document.getElementById("lastDate");
+      const moodSelect = document.getElementById("moodSelect");
+      const saveEntryButton = document.getElementById("saveEntry");
+      const clearAllButton = document.getElementById("clearAll");
+      const messageBox = document.getElementById("message");
+      const analysisEl = document.getElementById("analysis");
+
+      let cycleTrendChart;
+      let moodHistoryChart;
+      let moodDistributionChart;
+      let cyclePatternChart;
+
+      function getRecords() {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        return raw ? JSON.parse(raw) : [];
+      }
+
+      function setRecords(records) {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(records));
+      }
+
+      function formatDate(date) {
+        return new Date(date).toLocaleDateString(undefined, {
+          month: "short",
+          day: "numeric",
+        });
+      }
+
+      function daysBetween(earlier, later) {
+        return Math.round((later - earlier) / (1000 * 60 * 60 * 24));
+      }
+
+      function showMessage(text, success = true) {
+        messageBox.style.display = "block";
+        messageBox.style.background = success ? "#ecfdf5" : "#fee2e2";
+        messageBox.style.color = success ? "#166534" : "#991b1b";
+        messageBox.textContent = text;
+        window.setTimeout(() => {
+          messageBox.style.display = "none";
+        }, 4200);
+      }
+
+      function deriveEntryStats(records) {
+        if (!records.length) return null;
+        const sorted = [...records].sort(
+          (a, b) => new Date(a.firstDate) - new Date(b.firstDate),
+        );
+
+        const cycleLengths = [];
+        for (let i = 1; i < sorted.length; i++) {
+          cycleLengths.push(
+            daysBetween(
+              new Date(sorted[i - 1].firstDate),
+              new Date(sorted[i].firstDate),
+            ),
+          );
+        }
+
+        const current = sorted[sorted.length - 1];
+        const missedDays = current.missedDate
+          ? daysBetween(
+              new Date(current.firstDate),
+              new Date(current.missedDate),
+            )
+          : 0;
+        const lastDays = daysBetween(
+          new Date(current.firstDate),
+          new Date(current.lastDate),
+        );
+        const moodCounts = {};
+        const moodScores = [];
+        const moodLabels = [];
+        const moodHistoryValues = [];
+        const moodHistoryDates = [];
+
+        sorted.forEach((entry, index) => {
+          moodCounts[entry.mood] = (moodCounts[entry.mood] || 0) + 1;
+          if (moodValues[entry.mood] !== undefined) {
+            moodScores.push(moodValues[entry.mood]);
+          }
+          moodLabels.push(formatDate(entry.firstDate));
+          moodHistoryValues.push(moodValues[entry.mood] || 3);
+          moodHistoryDates.push(formatDate(entry.firstDate));
+        });
+
+        return {
+          sorted,
+          cycleLengths,
+          current,
+          missedDays,
+          lastDays,
+          moodCounts,
+          moodLabels,
+          moodHistoryValues,
+          moodHistoryDates,
+          averageCycle: cycleLengths.length
+            ? Math.round(
+                cycleLengths.reduce((a, b) => a + b, 0) / cycleLengths.length,
+              )
+            : lastDays,
+          longestCycle: cycleLengths.length
+            ? Math.max(...cycleLengths)
+            : lastDays,
+          shortestCycle: cycleLengths.length
+            ? Math.min(...cycleLengths)
+            : lastDays,
         };
+      }
 
-        const moodColors = {
-            Happy: '#22c55e',
-            Calm: '#38bdf8',
-            Tired: '#f59e0b',
-            Anxious: '#f97316',
-            Sad: '#6366f1',
-            Irritable: '#ef4444'
-        };
+      function renderCharts() {
+        const records = getRecords();
+        const stats = deriveEntryStats(records);
 
-        const firstDateInput = document.getElementById('firstDate');
-        const missedDateInput = document.getElementById('missedDate');
-        const lastDateInput = document.getElementById('lastDate');
-        const moodSelect = document.getElementById('moodSelect');
-        const saveEntryButton = document.getElementById('saveEntry');
-        const clearAllButton = document.getElementById('clearAll');
-        const messageBox = document.getElementById('message');
-        const analysisEl = document.getElementById('analysis');
+        const cycleTrendCtx = document
+          .getElementById("cycleTrendChart")
+          .getContext("2d");
+        const moodHistoryCtx = document
+          .getElementById("moodHistoryChart")
+          .getContext("2d");
+        const moodDistributionCtx = document
+          .getElementById("moodDistributionChart")
+          .getContext("2d");
+        const cyclePatternCtx = document
+          .getElementById("cyclePatternChart")
+          .getContext("2d");
 
-        let cycleTrendChart;
-        let moodHistoryChart;
-        let moodDistributionChart;
-        let cyclePatternChart;
+        if (cycleTrendChart) cycleTrendChart.destroy();
+        if (moodHistoryChart) moodHistoryChart.destroy();
+        if (moodDistributionChart) moodDistributionChart.destroy();
+        if (cyclePatternChart) cyclePatternChart.destroy();
 
-        function getRecords() {
-            const raw = localStorage.getItem(STORAGE_KEY);
-            return raw ? JSON.parse(raw) : [];
-        }
+        const labels = stats
+          ? stats.sorted.map((entry, index) => `Cycle ${index + 1}`)
+          : [];
+        const trendData = stats
+          ? stats.sorted.map((entry) =>
+              daysBetween(new Date(entry.firstDate), new Date(entry.lastDate)),
+            )
+          : [];
 
-        function setRecords(records) {
-            localStorage.setItem(STORAGE_KEY, JSON.stringify(records));
-        }
+        cycleTrendChart = new Chart(cycleTrendCtx, {
+          type: "line",
+          data: {
+            labels,
+            datasets: [
+              {
+                label: "Days from first to last period",
+                data: trendData,
+                borderColor: "#3b82f6",
+                backgroundColor: "rgba(59, 130, 246, 0.18)",
+                fill: true,
+                tension: 0.3,
+                pointRadius: 5,
+                pointBackgroundColor: "#2563eb",
+              },
+            ],
+          },
+          options: {
+            responsive: true,
+            scales: {
+              y: {
+                beginAtZero: true,
+                title: { display: true, text: "Days" },
+              },
+            },
+          },
+        });
 
-        function formatDate(date) {
-            return new Date(date).toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
-        }
-
-        function daysBetween(earlier, later) {
-            return Math.round((later - earlier) / (1000 * 60 * 60 * 24));
-        }
-
-        function showMessage(text, success = true) {
-            messageBox.style.display = 'block';
-            messageBox.style.background = success ? '#ecfdf5' : '#fee2e2';
-            messageBox.style.color = success ? '#166534' : '#991b1b';
-            messageBox.textContent = text;
-            window.setTimeout(() => { messageBox.style.display = 'none'; }, 4200);
-        }
-
-        function deriveEntryStats(records) {
-            if (!records.length) return null;
-            const sorted = [...records].sort((a, b) => new Date(a.firstDate) - new Date(b.firstDate));
-
-            const cycleLengths = [];
-            for (let i = 1; i < sorted.length; i++) {
-                cycleLengths.push(daysBetween(new Date(sorted[i - 1].firstDate), new Date(sorted[i].firstDate)));
-            }
-
-            const current = sorted[sorted.length - 1];
-            const missedDays = current.missedDate ? daysBetween(new Date(current.firstDate), new Date(current.missedDate)) : 0;
-            const lastDays = daysBetween(new Date(current.firstDate), new Date(current.lastDate));
-            const moodCounts = {};
-            const moodScores = [];
-            const moodLabels = [];
-            const moodHistoryValues = [];
-            const moodHistoryDates = [];
-
-            sorted.forEach((entry, index) => {
-                moodCounts[entry.mood] = (moodCounts[entry.mood] || 0) + 1;
-                if (moodValues[entry.mood] !== undefined) {
-                    moodScores.push(moodValues[entry.mood]);
-                }
-                moodLabels.push(formatDate(entry.firstDate));
-                moodHistoryValues.push(moodValues[entry.mood] || 3);
-                moodHistoryDates.push(formatDate(entry.firstDate));
-            });
-
-            return {
-                sorted,
-                cycleLengths,
-                current,
-                missedDays,
-                lastDays,
-                moodCounts,
-                moodLabels,
-                moodHistoryValues,
-                moodHistoryDates,
-                averageCycle: cycleLengths.length ? Math.round(cycleLengths.reduce((a, b) => a + b, 0) / cycleLengths.length) : lastDays,
-                longestCycle: cycleLengths.length ? Math.max(...cycleLengths) : lastDays,
-                shortestCycle: cycleLengths.length ? Math.min(...cycleLengths) : lastDays,
-            };
-        }
-
-        function renderCharts() {
-            const records = getRecords();
-            const stats = deriveEntryStats(records);
-
-            const cycleTrendCtx = document.getElementById('cycleTrendChart').getContext('2d');
-            const moodHistoryCtx = document.getElementById('moodHistoryChart').getContext('2d');
-            const moodDistributionCtx = document.getElementById('moodDistributionChart').getContext('2d');
-            const cyclePatternCtx = document.getElementById('cyclePatternChart').getContext('2d');
-
-            if (cycleTrendChart) cycleTrendChart.destroy();
-            if (moodHistoryChart) moodHistoryChart.destroy();
-            if (moodDistributionChart) moodDistributionChart.destroy();
-            if (cyclePatternChart) cyclePatternChart.destroy();
-
-            const labels = stats ? stats.sorted.map((entry, index) => `Cycle ${index + 1}`) : [];
-            const trendData = stats ? stats.sorted.map(entry => daysBetween(new Date(entry.firstDate), new Date(entry.lastDate))) : [];
-
-            cycleTrendChart = new Chart(cycleTrendCtx, {
-                type: 'line',
-                data: {
-                    labels,
-                    datasets: [{
-                        label: 'Days from first to last period',
-                        data: trendData,
-                        borderColor: '#3b82f6',
-                        backgroundColor: 'rgba(59, 130, 246, 0.18)',
-                        fill: true,
-                        tension: 0.3,
-                        pointRadius: 5,
-                        pointBackgroundColor: '#2563eb'
-                    }]
+        moodHistoryChart = new Chart(moodHistoryCtx, {
+          type: "line",
+          data: {
+            labels: stats ? stats.moodHistoryDates : [],
+            datasets: [
+              {
+                label: "Mood score",
+                data: stats ? stats.moodHistoryValues : [],
+                borderColor: "#ec4899",
+                backgroundColor: "rgba(236, 72, 153, 0.18)",
+                fill: true,
+                tension: 0.3,
+                pointRadius: 5,
+                pointBackgroundColor: "#db2777",
+              },
+            ],
+          },
+          options: {
+            responsive: true,
+            scales: {
+              y: {
+                beginAtZero: true,
+                min: 0,
+                max: 6,
+                ticks: {
+                  stepSize: 1,
+                  callback: (value) => {
+                    const map = {
+                      1: "Low",
+                      2: "Low",
+                      3: "Mid",
+                      4: "Good",
+                      5: "Great",
+                      6: "Great",
+                    };
+                    return map[value] || value;
+                  },
                 },
-                options: {
-                    responsive: true,
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            title: { display: true, text: 'Days' }
-                        }
-                    }
-                }
-            });
+              },
+            },
+          },
+        });
 
-            moodHistoryChart = new Chart(moodHistoryCtx, {
-                type: 'line',
-                data: {
-                    labels: stats ? stats.moodHistoryDates : [],
-                    datasets: [{
-                        label: 'Mood score',
-                        data: stats ? stats.moodHistoryValues : [],
-                        borderColor: '#ec4899',
-                        backgroundColor: 'rgba(236, 72, 153, 0.18)',
-                        fill: true,
-                        tension: 0.3,
-                        pointRadius: 5,
-                        pointBackgroundColor: '#db2777'
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            min: 0,
-                            max: 6,
-                            ticks: {
-                                stepSize: 1,
-                                callback: value => {
-                                    const map = {1:'Low',2:'Low',3:'Mid',4:'Good',5:'Great',6:'Great'};
-                                    return map[value] || value;
-                                }
-                            }
-                        }
-                    }
-                }
-            });
+        moodDistributionChart = new Chart(moodDistributionCtx, {
+          type: "doughnut",
+          data: {
+            labels: stats ? Object.keys(stats.moodCounts) : [],
+            datasets: [
+              {
+                data: stats ? Object.values(stats.moodCounts) : [],
+                backgroundColor: stats
+                  ? Object.keys(stats.moodCounts).map(
+                      (mood) => moodColors[mood] || "#94a3b8",
+                    )
+                  : [],
+                borderWidth: 0,
+              },
+            ],
+          },
+          options: {
+            responsive: true,
+            plugins: {
+              legend: { position: "bottom" },
+            },
+          },
+        });
 
-            moodDistributionChart = new Chart(moodDistributionCtx, {
-                type: 'doughnut',
-                data: {
-                    labels: stats ? Object.keys(stats.moodCounts) : [],
-                    datasets: [{
-                        data: stats ? Object.values(stats.moodCounts) : [],
-                        backgroundColor: stats ? Object.keys(stats.moodCounts).map(mood => moodColors[mood] || '#94a3b8') : [],
-                        borderWidth: 0
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    plugins: {
-                        legend: { position: 'bottom' }
-                    }
-                }
-            });
+        cyclePatternChart = new Chart(cyclePatternCtx, {
+          type: "bar",
+          data: {
+            labels: ["First→Missed", "First→Last", "Average Cycle"],
+            datasets: [
+              {
+                label: "Days",
+                data: stats
+                  ? [stats.missedDays || 0, stats.lastDays, stats.averageCycle]
+                  : [0, 0, 0],
+                backgroundColor: ["#60a5fa", "#22c55e", "#f59e0b"],
+              },
+            ],
+          },
+          options: {
+            responsive: true,
+            scales: {
+              y: {
+                beginAtZero: true,
+                title: { display: true, text: "Days" },
+              },
+            },
+          },
+        });
 
-            cyclePatternChart = new Chart(cyclePatternCtx, {
-                type: 'bar',
-                data: {
-                    labels: ['First→Missed', 'First→Last', 'Average Cycle'],
-                    datasets: [{
-                        label: 'Days',
-                        data: stats ? [stats.missedDays || 0, stats.lastDays, stats.averageCycle] : [0, 0, 0],
-                        backgroundColor: ['#60a5fa', '#22c55e', '#f59e0b']
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            title: { display: true, text: 'Days' }
-                        }
-                    }
-                }
-            });
+        renderAnalysis(stats);
+      }
 
-            renderAnalysis(stats);
+      function renderAnalysis(stats) {
+        analysisEl.innerHTML = "";
+        if (!stats) {
+          analysisEl.innerHTML =
+            '<div class="analysis-item"><strong>No entries yet</strong>Save your first cycle entry to see trends, mood distribution, and pattern insights.</div>';
+          return;
         }
 
-        function renderAnalysis(stats) {
-            analysisEl.innerHTML = '';
-            if (!stats) {
-                analysisEl.innerHTML = '<div class="analysis-item"><strong>No entries yet</strong>Save your first cycle entry to see trends, mood distribution, and pattern insights.</div>';
-                return;
-            }
+        const current = stats.current;
+        const notes = [];
+        notes.push({
+          title: "Recent cycle length",
+          value: `${stats.lastDays} days`,
+        });
+        notes.push({
+          title: "Average cycle length",
+          value: `${stats.averageCycle} days`,
+        });
+        notes.push({
+          title: "Longest observed cycle",
+          value: `${stats.longestCycle} days`,
+        });
+        notes.push({
+          title: "Shortest observed cycle",
+          value: `${stats.shortestCycle} days`,
+        });
 
-            const current = stats.current;
-            const notes = [];
-            notes.push({ title: 'Recent cycle length', value: `${stats.lastDays} days` });
-            notes.push({ title: 'Average cycle length', value: `${stats.averageCycle} days` });
-            notes.push({ title: 'Longest observed cycle', value: `${stats.longestCycle} days` });
-            notes.push({ title: 'Shortest observed cycle', value: `${stats.shortestCycle} days` });
+        const variation = stats.cycleLengths.length
+          ? stats.longestCycle - stats.shortestCycle
+          : 0;
+        if (variation >= 7) {
+          notes.push({
+            title: "Trend notice",
+            value:
+              "Your cycle shows irregular length variation. Take note of patterns and discuss with a provider if needed.",
+          });
+        } else {
+          notes.push({
+            title: "Trend notice",
+            value:
+              "Your cycle length is relatively stable. Keep tracking to confirm your pattern.",
+          });
+        }
 
-            const variation = stats.cycleLengths.length ? stats.longestCycle - stats.shortestCycle : 0;
-            if (variation >= 7) {
-                notes.push({ title: 'Trend notice', value: 'Your cycle shows irregular length variation. Take note of patterns and discuss with a provider if needed.' });
+        notes.push({ title: "Last recorded mood", value: `${current.mood}` });
+        notes.push({
+          title: "Missing dates",
+          value: current.missedDate
+            ? `${formatDate(current.missedDate)} recorded`
+            : "No missed date entered",
+        });
+
+        notes.forEach((item) => {
+          const el = document.createElement("div");
+          el.className = "analysis-item";
+          el.innerHTML = `<strong>${item.title}</strong><span>${item.value}</span>`;
+          analysisEl.appendChild(el);
+        });
+      }
+
+      function renderRecommendations(stats) {
+        const container = document.getElementById("recommendations");
+        container.innerHTML = "";
+
+        const suggestions = [];
+
+        if (!stats) {
+          suggestions.push({
+            title: "Start Tracking Your Cycle",
+            description:
+              "Save your cycle dates and mood regularly to receive personalized wellness suggestions.",
+          });
+        } else {
+          // cycle tracking
+          if (stats.cycleLengths.length < 2) {
+            suggestions.push({
+              title: "Continue Cycle Tracking",
+              description:
+                "Record more menstrual cycles to understand your cycle patterns over time.",
+            });
+          } else {
+            const variation = stats.longestCycle - stats.shortestCycle;
+
+            if (stats.averageCycle < 21 || stats.averageCycle > 35) {
+              suggestions.push({
+                title: "Monitor Your Cycle Pattern",
+                description:
+                  "Your recorded average cycle interval is outside the commonly expected adult range. Consider discussing persistent patterns with a gynecologist.",
+              });
+            } else if (variation >= 7) {
+              suggestions.push({
+                title: "Keep Track of Cycle Changes",
+                description:
+                  "Your recorded cycle intervals vary. Continue tracking and discuss persistent irregularity with a healthcare professional.",
+              });
             } else {
-                notes.push({ title: 'Trend notice', value: 'Your cycle length is relatively stable. Keep tracking to confirm your pattern.' });
+              suggestions.push({
+                title: "Maintain Your Tracking Routine",
+                description:
+                  "Your recorded cycle intervals appear relatively consistent. Keep recording dates to understand long-term patterns.",
+              });
             }
+          }
 
-            notes.push({ title: 'Last recorded mood', value: `${current.mood}` });
-            notes.push({ title: 'Missing dates', value: current.missedDate ? `${formatDate(current.missedDate)} recorded` : 'No missed date entered' });
+          // mood tracking
+          const negativeMoods = ["Tired", "Anxious", "Sad", "Irritable"];
 
-            notes.forEach(item => {
-                const el = document.createElement('div');
-                el.className = 'analysis-item';
-                el.innerHTML = `<strong>${item.title}</strong><span>${item.value}</span>`;
-                analysisEl.appendChild(el);
+          let negativeCount = 0;
+          let totalMoods = 0;
+
+          Object.entries(stats.moodCounts).forEach(([mood, count]) => {
+            totalMoods += count;
+
+            if (negativeMoods.includes(mood)) {
+              negativeCount += count;
+            }
+          });
+
+          if (totalMoods > 0 && negativeCount / totalMoods >= 0.5) {
+            suggestions.push({
+              title: "Prioritize Emotional Well-being",
+              description:
+                "Your mood records frequently include tiredness, sadness, anxiety or irritability. Consider relaxation activities, social support and a consistent sleep routine.",
             });
-        }
-
-        function validateDates(firstString, lastString, missedString) {
-            if (!firstString || !lastString) {
-                return 'Please enter both first period date and last period date.';
-            }
-            const first = new Date(firstString);
-            const last = new Date(lastString);
-            if (last < first) {
-                return 'Last period date must be the same or after the first period date.';
-            }
-            if (missedString) {
-                const missed = new Date(missedString);
-                if (missed < first || missed > last) {
-                    return 'Missed period date must fall between the first and last dates.';
-                }
-            }
-            return null;
-        }
-
-        function showPopup() {
-            const popup = document.getElementById('successPopup');
-            popup.classList.add('show');
-        }
-
-        function closePopup() {
-            const popup = document.getElementById('successPopup');
-            popup.classList.remove('show');
-        }
-
-        saveEntryButton.addEventListener('click', () => {
-            const firstDate = firstDateInput.value;
-            const missedDate = missedDateInput.value;
-            const lastDate = lastDateInput.value;
-            const mood = moodSelect.value;
-
-            const validation = validateDates(firstDate, lastDate, missedDate);
-            if (validation) {
-                showMessage(validation, false);
-                return;
-            }
-
-            const records = getRecords();
-            records.push({
-                firstDate,
-                missedDate: missedDate || null,
-                lastDate,
-                mood,
-                savedAt: new Date().toISOString()
+          } else {
+            suggestions.push({
+              title: "Maintain Your Mental Wellness",
+              description:
+                "Continue recording your moods. Make time for activities you enjoy, relaxation and adequate sleep.",
             });
-            setRecords(records);
-            firstDateInput.value = '';
-            missedDateInput.value = '';
-            lastDateInput.value = '';
-            moodSelect.value = 'Happy';
-            showPopup();
-            showMessage('Cycle entry saved successfully.');
-            renderCharts();
+          }
+        }
+
+        // general wellness suggestions
+        suggestions.push({
+          title: "Follow a Balanced Lifestyle",
+          description:
+            "Include nutritious meals, regular physical activity, adequate hydration and sufficient sleep in your daily routine.",
         });
 
-        document.getElementById('closePopup').addEventListener('click', closePopup);
-
-        clearAllButton.addEventListener('click', () => {
-            if (!confirm('Clear all saved tracker data?')) return;
-            localStorage.removeItem(STORAGE_KEY);
-            renderCharts();
-            showMessage('Tracker history cleared.', true);
+        suggestions.push({
+          title: "Stay Connected With Your Healthcare Provider",
+          description:
+            "If you experience persistent cycle changes or concerning symptoms, consult a qualified healthcare professional.",
         });
 
-        document.addEventListener('DOMContentLoaded', () => {
-            renderCharts();
+        // display recommendation cards
+        suggestions.forEach((item) => {
+          const card = document.createElement("div");
+          card.className = "recommendation-card";
+
+          const title = document.createElement("strong");
+          title.textContent = item.title;
+
+          const description = document.createElement("p");
+          description.textContent = item.description;
+
+          card.appendChild(title);
+          card.appendChild(description);
+
+          container.appendChild(card);
+        });
+      }
+
+      function validateDates(firstString, lastString, missedString) {
+        if (!firstString || !lastString) {
+          return "Please enter both first period date and last period date.";
+        }
+        const first = new Date(firstString);
+        const last = new Date(lastString);
+        if (last < first) {
+          return "Last period date must be the same or after the first period date.";
+        }
+        if (missedString) {
+          const missed = new Date(missedString);
+          if (missed < first || missed > last) {
+            return "Missed period date must fall between the first and last dates.";
+          }
+        }
+        return null;
+      }
+
+      function showPopup() {
+        const popup = document.getElementById("successPopup");
+        popup.classList.add("show");
+      }
+
+      function closePopup() {
+        const popup = document.getElementById("successPopup");
+        popup.classList.remove("show");
+      }
+
+      saveEntryButton.addEventListener("click", () => {
+        const firstDate = firstDateInput.value;
+        const missedDate = missedDateInput.value;
+        const lastDate = lastDateInput.value;
+        const mood = moodSelect.value;
+
+        const validation = validateDates(firstDate, lastDate, missedDate);
+        if (validation) {
+          showMessage(validation, false);
+          return;
+        }
+
+        const records = getRecords();
+        records.push({
+          firstDate,
+          missedDate: missedDate || null,
+          lastDate,
+          mood,
+          savedAt: new Date().toISOString(),
+        });
+        setRecords(records);
+        firstDateInput.value = "";
+        missedDateInput.value = "";
+        lastDateInput.value = "";
+        moodSelect.value = "Happy";
+        showPopup();
+        showMessage("Cycle entry saved successfully.");
+        renderCharts();
+      });
+
+      document
+        .getElementById("closePopup")
+        .addEventListener("click", closePopup);
+
+      clearAllButton.addEventListener("click", () => {
+        if (!confirm("Clear all saved tracker data?")) return;
+        localStorage.removeItem(STORAGE_KEY);
+        renderCharts();
+        showMessage("Tracker history cleared.", true);
+      });
+
+      document.addEventListener("DOMContentLoaded", () => {
+        renderCharts();
+      });
+
+      document
+        .getElementById("wellnessForm")
+        .addEventListener("submit", function (e) {
+          e.preventDefault();
+
+          const sleep = document.getElementById("sleep").value;
+          const water = document.getElementById("water").value;
+          const exercise = document.getElementById("exercise").value;
+          const stress = document.getElementById("stress").value;
+          const food = document.getElementById("food").value;
+          const meals = document.getElementById("meals").value;
+
+          const symptoms = Array.from(
+            document.querySelectorAll('input[name="symptoms"]:checked'),
+          ).map((item) => item.value);
+
+          const recommendations = [];
+
+          function addRecommendation(title, description, category) {
+            recommendations.push({ title, description, category });
+          }
+
+          // sleep recommendations
+          if (sleep === "less" || sleep === "medium") {
+            addRecommendation(
+              "Improve Your Sleep Routine",
+              "Try maintaining a consistent bedtime and aim for 7–9 hours of sleep each night.",
+              "Sleep",
+            );
+          } else if (sleep === "good") {
+            addRecommendation(
+              "Maintain Your Sleep Schedule",
+              "Your reported sleep duration is within the usual adult recommendation. Continue maintaining a consistent routine.",
+              "Sleep",
+            );
+          } else {
+            addRecommendation(
+              "Monitor Your Sleep",
+              "You report sleeping more than 9 hours. If you still feel tired or this is unusual for you, consider discussing it with a healthcare professional.",
+              "Sleep",
+            );
+          }
+
+          // water recommendations
+          if (water === "low" || water === "medium") {
+            addRecommendation(
+              "Improve Your Hydration",
+              "Try drinking water regularly throughout the day. Your hydration needs depend on activity, climate and health.",
+              "Hydration",
+            );
+          } else {
+            addRecommendation(
+              "Keep Staying Hydrated",
+              "Continue drinking water regularly and adjust your intake according to thirst, activity and weather.",
+              "Hydration",
+            );
+          }
+
+          // exercise recommendations
+          if (exercise === "none" || exercise === "low") {
+            addRecommendation(
+              "Increase Physical Activity Gradually",
+              "Start with comfortable activities such as walking, stretching or yoga. Gradually work towards regular physical activity.",
+              "Exercise",
+            );
+          } else {
+            addRecommendation(
+              "Keep Moving",
+              "Continue your physical activity routine and include a mix of aerobic and strengthening activities as comfortable.",
+              "Exercise",
+            );
+          }
+
+          // stress recommendations
+          if (stress === "high") {
+            addRecommendation(
+              "Manage Your Stress",
+              "Try deep breathing, meditation, journaling or relaxing activities. Seek support if stress feels difficult to manage.",
+              "Mental Wellness",
+            );
+          } else if (stress === "medium") {
+            addRecommendation(
+              "Take Time to Relax",
+              "Include short breaks, enjoyable activities and relaxation exercises in your daily routine.",
+              "Mental Wellness",
+            );
+          } else {
+            addRecommendation(
+              "Maintain Emotional Wellness",
+              "Continue making time for activities that help you feel relaxed and positive.",
+              "Mental Wellness",
+            );
+          }
+
+          // food recommendations
+          if (food === "often") {
+            addRecommendation(
+              "Improve Your Food Choices",
+              "Try replacing frequent fast food meals with balanced meals containing vegetables, fruits, whole grains and protein.",
+              "Nutrition",
+            );
+          } else if (food === "sometimes") {
+            addRecommendation(
+              "Build Balanced Eating Habits",
+              "Try including more nutritious home-prepared meals in your weekly routine.",
+              "Nutrition",
+            );
+          } else {
+            addRecommendation(
+              "Continue Balanced Eating",
+              "Keep including a variety of nutritious foods in your meals.",
+              "Nutrition",
+            );
+          }
+
+          // meal recommendations
+          if (meals === "no" || meals === "sometimes") {
+            addRecommendation(
+              "Maintain Regular Meal Habits",
+              "Try planning regular, balanced meals according to your daily routine. Avoid unnecessarily skipping meals.",
+              "Nutrition",
+            );
+          }
+
+          // symptom recommendations
+          if (symptoms.includes("fatigue")) {
+            addRecommendation(
+              "Monitor Your Energy Levels",
+              "Track when fatigue occurs and how long it lasts. Persistent fatigue should be discussed with a healthcare professional.",
+              "Symptoms",
+            );
+          }
+
+          if (symptoms.includes("bloating")) {
+            addRecommendation(
+              "Track Digestive Discomfort",
+              "Notice whether bloating is associated with particular foods or times in your cycle. Seek medical advice if it persists or worsens.",
+              "Symptoms",
+            );
+          }
+
+          if (symptoms.includes("acne")) {
+            addRecommendation(
+              "Follow a Gentle Skincare Routine",
+              "Use gentle skincare products and avoid picking at acne. Consult a dermatologist if acne persists.",
+              "Symptoms",
+            );
+          }
+
+          if (symptoms.includes("cramps")) {
+            addRecommendation(
+              "Manage Menstrual Discomfort",
+              "A warm compress and gentle movement may help with mild cramps. Seek medical advice for severe or unusual pain.",
+              "Symptoms",
+            );
+          }
+
+          if (symptoms.includes("hairfall")) {
+            addRecommendation(
+              "Monitor Hair Changes",
+              "Track changes in hair shedding and discuss persistent or sudden hair loss with a healthcare professional.",
+              "Symptoms",
+            );
+          }
+
+          if (symptoms.length === 0) {
+            addRecommendation(
+              "Continue Monitoring Your Health",
+              "Keep tracking any changes in your body and record symptoms if they appear.",
+              "General Wellness",
+            );
+          }
+
+          // display results
+          const resultContainer = document.getElementById(
+            "wellnessRecommendations",
+          );
+          const resultsSection = document.getElementById("wellnessResults");
+
+          resultContainer.innerHTML = "";
+
+          recommendations.forEach((item) => {
+            const card = document.createElement("div");
+            card.className = "wellness-card";
+
+            const tag = document.createElement("span");
+            tag.className = "wellness-tag";
+            tag.textContent = item.category;
+
+            const heading = document.createElement("h3");
+            heading.textContent = item.title;
+
+            const description = document.createElement("p");
+            description.textContent = item.description;
+
+            card.appendChild(tag);
+            card.appendChild(heading);
+            card.appendChild(description);
+
+            resultContainer.appendChild(card);
+          });
+
+          resultsSection.style.display = "block";
+          resultsSection.scrollIntoView({ behavior: "smooth" });
         });
     </script>
-</body>
+  </body>
 </html>

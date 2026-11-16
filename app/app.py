@@ -224,6 +224,67 @@ def login_user():
 if __name__ == "__main__":
     app.run(debug=True)
 
+
+def get_lifestyle_recommendations(data):
+    recommendations = []
+
+    # physical activity
+    if data[33] == 0:
+        recommendations.append({
+            "title": "Improve Physical Activity",
+            "description": "Try regular walking, yoga or light exercise. Start slowly and build a consistent routine."
+        })
+
+    # fast food
+    if data[32] == 1:
+        recommendations.append({
+            "title": "Maintain a Balanced Diet",
+            "description": "Try reducing frequent fast food consumption and include fruits, vegetables and whole grains."
+        })
+
+    # bmi
+    bmi = data[3]
+
+    if bmi >= 25:
+        recommendations.append({
+            "title": "Maintain a Healthy Weight",
+            "description": "Focus on balanced meals and regular physical activity. Avoid crash diets."
+        })
+    elif 0 < bmi < 18.5:
+        recommendations.append({
+            "title": "Focus on Balanced Nutrition",
+            "description": "Maintain a nutritious and balanced diet to support your overall health."
+        })
+
+    # irregular menstrual cycle
+    if data[8] == 0:
+        recommendations.append({
+            "title": "Track Your Menstrual Cycle",
+            "description": "Record your menstrual dates and cycle patterns. Consult a gynecologist if irregularity continues."
+        })
+
+    # hair growth
+    if data[28] == 1:
+        recommendations.append({
+            "title": "Monitor Hormonal Symptoms",
+            "description": "Keep track of unusual hair growth and discuss persistent changes with a healthcare professional."
+        })
+
+    # skin darkening
+    if data[29] == 1:
+        recommendations.append({
+            "title": "Monitor Skin Changes",
+            "description": "Keep track of skin changes, especially darkened or thickened skin, and discuss them with a doctor."
+        })
+
+    # default recommendations
+    recommendations.append({
+        "title": "Prioritize Sleep and Stress Management",
+        "description": "Maintain a consistent sleep schedule and try relaxation activities such as meditation."
+    })
+
+    return recommendations
+
 # # --------- PREDICTION --------- #
 
 # @app.route("/predict", methods=["POST"])
